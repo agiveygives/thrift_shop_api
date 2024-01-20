@@ -1,0 +1,82 @@
+version: '3'
+
+tasks:
+  # Basic task with a command
+  up:
+    cmds:
+      - bundle install
+      - docker compose up --build -d
+      - echo "Up and running!"
+      - |
+          if [ -n "$(rails db:exists)" ]; then
+            echo "Database already exists. Skipping creation."
+          else
+            bundle exec rails db:create
+          fi
+      - docker compose exec api bundle exec rails db:migrate db:seed
+
+  down:
+    cmds:
+      - docker compose down
+
+  stop:
+    cmds:
+      - docker compose stop
+
+  start:
+    cmds:
+      - docker compose up --build -d
+
+  migrate:
+    cmds:
+      - docker compose exec api bundle exec rails db:migrate db:seed
+
+  teardown:
+    cmds:
+      - docker compose up --build -d
+      - docker compose exec api bundle exec rails db:drop
+      - docker compose down
+
+  # Task with dependencies
+  greet:
+    cmds:
+      - echo "Greetings!"
+    deps:
+      - hello
+
+  # Task with variables
+  with_vars:
+    vars:
+      name: "John"
+    cmds:
+      - echo "Hello, ${name}!"
+
+  # Task with environment variables
+  with_env:
+    env:
+      VAR1: "value1"
+      VAR2: "value2"
+    cmds:
+      - 'echo "VAR1: $VAR1, VAR2: $VAR2"'
+
+  # Task with conditions
+  conditional:
+    cmds:
+      - echo "This will only run on Linux"
+    preconditions:
+      - GOOS=linux
+
+  # Task with dynamic dependencies
+  dynamic_deps:
+    cmds:
+      - echo "This has dynamic dependencies"
+    deps:
+      - echo_dependency
+
+  echo_dependency:
+    cmds:
+      - echo "This is a dependency"
+
+  echo_dependency2:
+    cmds:
+      - echo "This is another dependency"
