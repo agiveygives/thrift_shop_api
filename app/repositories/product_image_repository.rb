@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: product_images
@@ -20,5 +22,5 @@
 #
 #  fk_rails_...  (product_id => products.id)
 #
-class ProductImage < ApplicationRecord
+class ProductImageRepository < ApplicationRepository
 end

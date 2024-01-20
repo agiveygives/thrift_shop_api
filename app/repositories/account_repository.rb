@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: accounts
@@ -18,5 +20,5 @@
 #  index_accounts_on_email         (email) UNIQUE
 #  index_accounts_on_phone_number  (phone_number) UNIQUE
 #
-class Account < ApplicationRecord
+class AccountRepository < ApplicationRepository
 end

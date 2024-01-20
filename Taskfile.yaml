@@ -1,7 +1,6 @@
 version: '3'
 
 tasks:
-  # Basic task with a command
   up:
     cmds:
       - bundle install
@@ -27,15 +26,19 @@ tasks:
     cmds:
       - docker compose up --build -d
 
-  migrate:
-    cmds:
-      - docker compose exec api bundle exec rails db:migrate db:seed
-
   teardown:
     cmds:
       - docker compose up --build -d
       - docker compose exec api bundle exec rails db:drop
       - docker compose down
+
+  format:
+    cmds:
+      - bundle exec rubocop -A
+
+  lint:
+    cmds:
+      - bundle exec rubocop
 
   # Task with dependencies
   greet:
@@ -45,11 +48,12 @@ tasks:
       - hello
 
   # Task with variables
-  with_vars:
-    vars:
-      name: "John"
+  migrate:
     cmds:
-      - echo "Hello, ${name}!"
+      - docker compose exec api bundle exec rails db:migrate db:seed
+      - docker cp $(docker-compose ps -q api):rails/db/schema.rb ./db/schema.rb
+      - docker compose exec api bundle exec annotate
+      - docker cp $(docker-compose ps -q api):rails/app ./
 
   # Task with environment variables
   with_env:
