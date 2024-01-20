@@ -51,3 +51,5 @@ group :development do
   gem 'rubocop-rails', '~> 2.22'
   gem 'rubocop-rspec', '~> 2.26.1'
 end
+
+gem 'ulid', '~> 1.4'
