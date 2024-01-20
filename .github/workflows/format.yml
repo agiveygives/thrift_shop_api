@@ -1,0 +1,38 @@
+name: Auto Format on Comment
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  format_and_commit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check if comment contains "/format"
+      id: check_comment
+      run: echo "::set-output name=contains_format::${{ contains(github.event.comment.body, '/format') }}"
+
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.2
+
+    - name: Install Dependencies
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+
+    - name: Run RuboCop with -A option and commit changes
+      if: steps.check_comment.outputs.contains_format == 'true'
+      run: |
+        git config user.name "${{ github.actor }}"
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+        bundle exec rubocop -A
+        git add .
+        git commit -m "Auto format with RuboCop -A"
+        git push origin ${{ github.head_ref }}
