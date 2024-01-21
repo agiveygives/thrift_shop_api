@@ -52,4 +52,8 @@ group :development do
   gem 'rubocop-rspec', '~> 2.26.1'
 end
 
+gem 'devise', '~> 4.9.3'
+gem 'devise-jwt'
+gem 'jsonapi-serializer'
+gem 'rack-cors'
 gem 'ulid', '~> 1.4'

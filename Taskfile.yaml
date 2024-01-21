@@ -12,7 +12,7 @@ tasks:
           else
             bundle exec rails db:create
           fi
-      - docker compose exec api bundle exec rails db:migrate db:seed
+      - task: migrate
 
   down:
     cmds:

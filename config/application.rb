@@ -36,5 +36,11 @@ module ThriftShopApi
 
       g.orm :active_record, primary_key_type: :string
     end
+
+    # devise
+    config.action_mailer.default_url_options = {
+      host: ENV.fetch('HOST', 'localhost'),
+      port: 3001
+    }
   end
 end
