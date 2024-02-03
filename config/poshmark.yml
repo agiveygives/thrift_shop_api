@@ -1,0 +1,11 @@
+default: &default
+  s3_bucket_name: 'thrift-shop-images'
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

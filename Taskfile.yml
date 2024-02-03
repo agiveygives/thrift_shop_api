@@ -12,7 +12,7 @@ tasks:
           else
             bundle exec rails db:create
           fi
-      - docker compose exec api bundle exec rails db:migrate db:seed
+      - task: migrate
 
   down:
     cmds:
@@ -40,20 +40,32 @@ tasks:
     cmds:
       - bundle exec rubocop
 
-  # Task with dependencies
-  greet:
-    cmds:
-      - echo "Greetings!"
-    deps:
-      - hello
-
-  # Task with variables
   migrate:
     cmds:
       - docker compose exec api bundle exec rails db:migrate db:seed
-      - docker cp $(docker-compose ps -q api):rails/db/schema.rb ./db/schema.rb
+      - docker cp $(docker-compose ps -q api):app/db/schema.rb ./db/schema.rb
       - docker compose exec api bundle exec annotate
-      - docker cp $(docker-compose ps -q api):rails/app ./
+      - docker cp $(docker-compose ps -q api):app/app ./
+
+  secrets-dev:
+    cmds:
+      - EDITOR='code --wait' bundle exec rails credentials:edit --environment development
+
+  secrets-prod:
+    cmds:
+      - EDITOR='code --wait' bundle exec rails credentials:edit --environment production
+
+  secrets-staging:
+    cmds:
+      - EDITOR='code --wait' bundle exec rails credentials:edit --environment staging
+
+  secrets-test:
+    cmds:
+      - EDITOR='code --wait' bundle exec rails credentials:edit --environment test
+
+  console:
+    cmds:
+      - docker compose exec api bundle exec rails console
 
   # Task with environment variables
   with_env:

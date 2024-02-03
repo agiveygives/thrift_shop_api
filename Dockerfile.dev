@@ -5,11 +5,10 @@ ARG RUBY_VERSION=3.2.2
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 # Rails app lives here
-WORKDIR /rails
+WORKDIR /app
 
 # Set production environment
 ENV RAILS_ENV="development"
-
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
@@ -31,7 +30,9 @@ RUN chmod +x bin/* && \
     sed -i 's/ruby\.exe$/ruby/' bin/*
 
 # Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+ENTRYPOINT ["/app/bin/docker-entrypoint"]
+
+RUN rm /app/tmp/pids/server.pid -f
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000

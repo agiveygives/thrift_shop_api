@@ -52,4 +52,7 @@ group :development do
   gem 'rubocop-rspec', '~> 2.26.1'
 end
 
+gem "aws-sdk-s3", "~> 1.142"
+gem "selenium-webdriver", "~> 4.16"
+gem "sidekiq", "~> 7.2"
 gem 'ulid', '~> 1.4'

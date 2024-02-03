@@ -1,0 +1,85 @@
+# syntax = docker/dockerfile:1
+
+# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
+ARG RUBY_VERSION=3.2.2
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+
+WORKDIR /app
+
+ENV RAILS_ENV="development"
+
+# Throw-away build stage to reduce size of final image
+FROM base as build
+
+# Install packages needed to build gems
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config
+
+# Install system dependencies
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    gnupg2 \
+    nodejs \
+    wget \
+    curl \
+    unzip \
+    libgconf-2-4 \
+    libnss3 \
+    libxi6 \
+    libglib2.0-0 \
+    libxext6 \
+    libxrender1 \
+    libxslt1-dev \
+    libxml2 \
+    libfontconfig1 \
+    libjpeg-dev \
+    libpng-dev \
+    libicu-dev \
+    libfreetype6 \
+    libssl-dev \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxtst6 \
+    libxrandr2 \
+    libasound2 \
+    libpango-1.0-0 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libc6 \
+    libcairo2 \
+    libfontconfig1 \
+    libpango-1.0-0 \
+    libx11-6 \
+    libxext6 \
+    xvfb
+
+# Install Chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
+  && apt-get update \
+  && apt-get install -y google-chrome-stable
+
+# Install ChromeDriver
+RUN CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) \
+  && wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip \
+  && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
+  && rm /tmp/chromedriver.zip \
+  && chmod +x /usr/local/bin/chromedriver
+
+# Copy Gemfile and Gemfile.lock into the container
+COPY Gemfile Gemfile.lock ./
+
+# Install Ruby dependencies
+RUN bundle install
+
+# Copy the rest of the application code into the container
+COPY . .
+
+# Adjust binfiles to be executable on Linux
+RUN chmod +x bin/* && \
+    sed -i "s/\r$//g" bin/* && \
+    sed -i 's/ruby\.exe$/ruby/' bin/*
+
+CMD ["bundle", "exec", "sidekiq"]

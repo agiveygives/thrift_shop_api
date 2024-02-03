@@ -31,10 +31,14 @@ module ThriftShopApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    config.active_job.queue_adapter = :sidekiq
+
     config.generators do |g|
       g.test_framework :test_unit, fixture: false
 
       g.orm :active_record, primary_key_type: :string
     end
+
+    config.poshmark = config_for(:poshmark)
   end
 end
