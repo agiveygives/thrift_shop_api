@@ -40,12 +40,12 @@ tasks:
     cmds:
       - bundle exec rubocop
 
-  # Task with dependencies
-  greet:
+  rails-generate:
+    desc: "Run 'rails g' with additional arguments"
     cmds:
-      - echo "Greetings!"
-    deps:
-      - hello
+      - "docker compose exec api bundle exec rails g {{.CLI_ARGS}}"
+      - docker cp $(docker-compose ps -q api):rails/. ./
+    aliases: ['g', 'generate']
 
   # Task with variables
   migrate:

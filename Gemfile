@@ -52,4 +52,12 @@ group :development do
   gem 'rubocop-rspec', '~> 2.26.1'
 end
 
+# Token Authentication
+# gem 'devise_token_auth', '~> 1.2', '>= 1.2.2'
+gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'
+gem "omniauth-facebook", "~> 9.0"
+gem "omniauth-google-oauth2", "~> 1.1"
+gem "omniauth-apple", "~> 1.3"
+
 gem 'ulid', '~> 1.4'
+
