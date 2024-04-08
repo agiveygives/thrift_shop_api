@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThriftShop
 	class Error < StandardError
 		# Generic error class for ThriftShop

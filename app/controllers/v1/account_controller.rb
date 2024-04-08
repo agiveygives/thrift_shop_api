@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 module V1
-  class AccountController < ApplicationController
-    authenticate_request only: [:show]
+	class AccountController < ApplicationController
+		authenticate_request only: [:show]
 
-    def create
-    end
+		def show
+			account = AccountRepository.find(params[:id])
 
-    def show
-      account = AccountRepository.find(params[:id])
+			render json: account, status: :ok
+		end
 
-      render json: account, status: :ok
-    end
-  end
+		def create; end
+	end
 end

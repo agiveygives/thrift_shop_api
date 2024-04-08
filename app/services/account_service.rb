@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccountService < ApplicationService
 	def initialize(authentication_service: AuthenticationService.new, account_repository: AccountRepository.new)
 		super()
@@ -14,8 +16,7 @@ class AccountService < ApplicationService
 
 	private
 
-	def create_and_authenticate_validate_params(params)
-	end
+	def create_and_authenticate_validate_params(params); end
 
 	attr_reader :authentication_service, :account_repository
 end

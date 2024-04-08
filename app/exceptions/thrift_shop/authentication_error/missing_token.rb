@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThriftShop
 	module AuthenticationError
 		class MissingToken < ThriftShop::Error
@@ -6,7 +8,7 @@ module ThriftShop
 					code: 'authentication.token.missing',
 					status: :unauthorized,
 					message: 'Token is missing'
-				)
+								)
 			end
 		end
 	end

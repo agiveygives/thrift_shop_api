@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThriftShop
 	module AuthenticationError
 		class ExpiredToken < ThriftShop::Error
@@ -6,7 +8,7 @@ module ThriftShop
 					code: 'authentication.token.expired',
 					status: :unauthorized,
 					message: 'Token is expired'
-				)
+								)
 			end
 		end
 	end

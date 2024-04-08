@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthenticationService < ApplicationService
 	def initialize(account_repository: ::AccountRepository.new)
 		super()
@@ -9,18 +11,14 @@ class AuthenticationService < ApplicationService
 		@jwt_expiration = (DateTime.now + 15.minutes).to_i
 	end
 
-	def authenticate(username:, password:, request:)
+	def authenticate(username:, password:)
 		account = account_repository.authenticate(username:, password:)
 
-		token = generate_token(account.id)
-
-		request.cookie_jar.signed[:access_token] = { value: token, httponly: true }
-
-		token
+		generate_token(account.id)
 	end
 
 	def authenticate_with_token(header)
-		token = header.split(' ').last
+		token = header.split.last
 
 		decoded_token = JWT.decode(token, jwt_secret, true, { algorithm: jwt_algorithm }).first.symbolize_keys
 
@@ -28,7 +26,7 @@ class AuthenticationService < ApplicationService
 
 		raise ThriftShop::AuthenticationError::InvalidToken unless account
 
-		return account
+		account
 	rescue JWT::DecodeError
 		raise ThriftShop::AuthenticationError::InvalidToken
 	rescue JWT::ExpiredSignature
@@ -36,13 +34,11 @@ class AuthenticationService < ApplicationService
 	end
 
 	class << self
-		def authenticate(username:, password:, request:)
-			new.authenticate(username:, password:, request:)
+		def authenticate(username:, password:)
+			new.authenticate(username:, password:)
 		end
 
-		def authenticate_with_token(token)
-			new.authenticate_with_token(token)
-		end
+		delegate :authenticate_with_token, to: :new
 	end
 
 	private
@@ -51,7 +47,7 @@ class AuthenticationService < ApplicationService
 
 	def generate_token(account_id)
 		JWT.encode(
-			{ account_id: account_id, exp: jwt_expiration },
+			{ account_id:, exp: jwt_expiration },
 			jwt_secret,
 			jwt_algorithm
 		)

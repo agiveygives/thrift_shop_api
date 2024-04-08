@@ -30,7 +30,7 @@ class AccountRepository < ApplicationRepository
 	def authenticate(username:, password:)
 		account = model.find_by(username:)
 
-		raise ThriftShop::AuthenticationError::InvalidCredentials unless account && account.authenticate(password)
+		raise ThriftShop::AuthenticationError::InvalidCredentials unless account&.authenticate(password)
 
 		account.to_public
 	end

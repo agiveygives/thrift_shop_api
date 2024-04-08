@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThriftShop
 	module AuthenticationError
 		class InvalidToken < ThriftShop::Error
@@ -6,7 +8,7 @@ module ThriftShop
 					code: 'authentication.token.invalid',
 					status: :unauthorized,
 					message: 'Token is invalid'
-				)
+								)
 			end
 		end
 	end

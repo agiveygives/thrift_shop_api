@@ -7,3 +7,15 @@ AllCops:
 
 Style/Documentation:
   Enabled: false
+
+Lint/EmptyClass:
+  Enabled: false
+
+Layout/EndOfLine:
+  Enabled: false
+
+Layout/IndentationStyle:
+  EnforcedStyle: tabs
+
+Layout/IndentationWidth:
+  Width: 1
