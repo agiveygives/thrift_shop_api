@@ -38,7 +38,9 @@ class AuthenticationService < ApplicationService
 			new.authenticate(username:, password:)
 		end
 
-		delegate :authenticate_with_token, to: :new
+		def authenticate_with_token(header)
+			new.authenticate_with_token(header)
+		end
 	end
 
 	private

@@ -26,7 +26,9 @@ class ApplicationRepository
 			define_method(:model) { model_class }
 		end
 
-		delegate :find, to: :new
+		def find(id)
+			new.find(id)
+		end
 
 		def find_by(**)
 			new.find_by(**)
