@@ -32,6 +32,18 @@ tasks:
       - docker compose exec api bundle exec rails db:drop
       - docker compose down
 
+  rebuild-db:
+    cmds:
+      - docker compose up --build -d
+      - |
+          if [ -n "$(rails db:exists)" ]; then
+            docker compose exec api bundle exec rails db:drop
+          else
+            echo "Database does not exist. Skipping deletion."
+          fi
+      - docker compose exec api bundle exec rails db:create
+      - docker compose exec api bundle exec rails db:migrate db:seed
+
   format:
     cmds:
       - bundle exec rubocop -A
@@ -39,13 +51,6 @@ tasks:
   lint:
     cmds:
       - bundle exec rubocop
-
-  # Task with dependencies
-  greet:
-    cmds:
-      - echo "Greetings!"
-    deps:
-      - hello
 
   # Task with variables
   migrate:
@@ -55,32 +60,14 @@ tasks:
       - docker compose exec api bundle exec annotate
       - docker cp $(docker-compose ps -q api):rails/app ./
 
-  # Task with environment variables
-  with_env:
-    env:
-      VAR1: "value1"
-      VAR2: "value2"
+  console:
     cmds:
-      - 'echo "VAR1: $VAR1, VAR2: $VAR2"'
+      - docker compose exec api bundle exec rails console
 
-  # Task with conditions
-  conditional:
+  logs:
     cmds:
-      - echo "This will only run on Linux"
-    preconditions:
-      - GOOS=linux
+      - docker compose logs --follow
 
-  # Task with dynamic dependencies
-  dynamic_deps:
+  attach:
     cmds:
-      - echo "This has dynamic dependencies"
-    deps:
-      - echo_dependency
-
-  echo_dependency:
-    cmds:
-      - echo "This is a dependency"
-
-  echo_dependency2:
-    cmds:
-      - echo "This is another dependency"
+      - docker attach $(docker-compose ps -q api)

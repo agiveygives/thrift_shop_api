@@ -21,4 +21,9 @@
 #  index_accounts_on_phone_number  (phone_number) UNIQUE
 #
 class Account < ApplicationRecord
+	has_secure_password
+
+	PUBLIC_ATTRIBUTE_NAMES = (self.column_names - %w[password_digest]).freeze
+
+	model_api AccountAPI
 end

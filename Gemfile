@@ -52,4 +52,8 @@ group :development do
   gem 'rubocop-rspec', '~> 2.26.1'
 end
 
+gem "bcrypt", "~> 3.1"
+
+gem "jwt", "~> 2.8"
+
 gem 'ulid', '~> 1.4'

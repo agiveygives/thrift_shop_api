@@ -21,4 +21,5 @@
 #  fk_rails_...  (account_id => accounts.id)
 #
 class AccountSetting < ApplicationRecord
+	PUBLIC_ATTRIBUTE_NAMES = self.column_names.freeze
 end

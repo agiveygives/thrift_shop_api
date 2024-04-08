@@ -21,4 +21,17 @@
 #  index_accounts_on_phone_number  (phone_number) UNIQUE
 #
 class AccountRepository < ApplicationRepository
+	model ::Account
+
+	def create(params)
+		model.create!(params).to_public
+	end
+
+	def authenticate(username:, password:)
+		account = model.find_by(username:)
+
+		raise ThriftShop::AuthenticationError::InvalidCredentials unless account && account.authenticate(password)
+
+		account.to_public
+	end
 end

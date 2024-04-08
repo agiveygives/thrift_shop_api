@@ -23,4 +23,5 @@
 #  fk_rails_...  (product_id => products.id)
 #
 class ProductImage < ApplicationRecord
+	PUBLIC_ATTRIBUTE_NAMES = self.column_names.freeze
 end
