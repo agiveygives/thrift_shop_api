@@ -16,26 +16,26 @@ class AuthenticationService < ApplicationService
 		account = account_repository.authenticate(username:, password:)
 
 		{
-			access_token: generate_token(:access, { account_id: account.id}, request),
+			access_token: generate_token(:access, { account_id: account.id }, request),
 			refresh_token: generate_token(:refresh, { account_id: account.id }, request)
 		}
 	end
 
 	def authenticate_with_access_token(request)
-		token = request.cookie_jar.signed[:access_token] || request.headers['Authorization'].split(' ').last
+		token = request.cookie_jar.signed[:access_token] || request.headers['Authorization'].split.last
 
 		raise ThriftShop::AuthenticationError::MissingToken if token.blank?
 
 		decoded_token = JWT.decode(token, jwt_secret, true, { algorithm: jwt_algorithm }).first.symbolize_keys
 
-		raise ThriftShop::AuthenticationError::InvalidToken unless decoded_token[:type] == "access"
+		raise ThriftShop::AuthenticationError::InvalidToken unless decoded_token[:type] == 'access'
 
 		account = account_repository.find(decoded_token[:account_id])
 
 		raise ThriftShop::AuthenticationError::InvalidToken unless account
 
 		# Sliding expiration, if a user is active (i.e. using a valid access token), the expiration time is extended
-		generate_token(:access, { account_id: account.id}, request)
+		generate_token(:access, { account_id: account.id }, request)
 		generate_token(:refresh, { account_id: account.id }, request)
 
 		account
@@ -47,13 +47,13 @@ class AuthenticationService < ApplicationService
 	end
 
 	def authenticate_with_refresh_token(request)
-		refresh_token = request.cookie_jar.signed[:refresh_token] || request.headers['Authorization'].split(' ').last
+		refresh_token = request.cookie_jar.signed[:refresh_token] || request.headers['Authorization'].split.last
 
 		raise ThriftShop::AuthenticationError::MissingToken if token.blank?
 
 		decoded_token = JWT.decode(refresh_token, jwt_secret, true, { algorithm: jwt_algorithm }).first.symbolize_keys
 
-		raise ThriftShop::AuthenticationError::InvalidToken unless decoded_token[:type] == "refresh"
+		raise ThriftShop::AuthenticationError::InvalidToken unless decoded_token[:type] == 'refresh'
 
 		account = account_repository.find(decoded_token[:account_id])
 
@@ -98,11 +98,11 @@ class AuthenticationService < ApplicationService
 
 	def set_cookie(request, name, value)
 		request.cookie_jar.signed[name.to_sym] = {
-			value: value,
+			value:,
 			domain: Rails.application.config.thrift_shop.domain,
 			path: '/',
 			secure: Rails.env.production?,
-			samesite: "strict",
+			samesite: 'strict',
 			httponly: true
 		}
 	end

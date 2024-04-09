@@ -6,7 +6,7 @@ module V1
 			tokens = AuthenticationService.authenticate(
 				username: params[:username],
 				password: params[:password],
-				request:,
+				request:
 			)
 
 			render json: tokens, status: :ok
