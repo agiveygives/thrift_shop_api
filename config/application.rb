@@ -31,6 +31,15 @@ module ThriftShopApi
 		# Skip views, helpers and assets when generating a new resource.
 		config.api_only = true
 
+		config.middleware.use ActionDispatch::Cookies
+
+    # Configuring the Sidekiq-specific session middleware
+    # is necessary because config.api_only = true
+    # source: https://github.com/mperham/sidekiq/wiki/Monitoring
+    config.session_store :cookie_store, key: '_thriftshop_session'
+
+		config.thrift_shop = config_for(:thrift_shop)
+
 		config.generators do |g|
 			g.test_framework :test_unit, fixture: false
 

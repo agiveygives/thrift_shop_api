@@ -6,9 +6,7 @@ module AuthenticatedRequest
 	included do
 		def self.authenticate_request(**)
 			before_action(**) do
-				raise ThriftShop::AuthenticationError::MissingToken if request.headers['Authorization'].blank?
-
-				@current_account = AuthenticationService.authenticate_with_token(request.headers['Authorization'])
+				@current_account = AuthenticationService.authenticate_with_access_token(request)
 			end
 		end
 	end

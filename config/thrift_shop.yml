@@ -1,0 +1,16 @@
+default: &default
+  host: https://api.staging.kcthrifty.com
+  domain: kcthrifty.com
+
+
+development:
+  <<: *default
+  host: http://localhost:3001
+  domain: localhost
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
+  host: https://api.kcthrifty.com

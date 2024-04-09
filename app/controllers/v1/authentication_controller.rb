@@ -3,9 +3,19 @@
 module V1
 	class AuthenticationController < ApplicationController
 		def login
-			token = AuthenticationService.authenticate(username: params[:username], password: params[:password])
+			tokens = AuthenticationService.authenticate(
+				username: params[:username],
+				password: params[:password],
+				request:,
+			)
 
-			render json: { token: }, status: :ok
+			render json: tokens, status: :ok
+		end
+
+		def refresh
+			AuthenticationService.authenticate_with_refresh_token(request)
+
+			render status: :no_content
 		end
 	end
 end
