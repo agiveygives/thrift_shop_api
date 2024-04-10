@@ -15,4 +15,5 @@
 #  updated_at  :datetime         not null
 #
 class Product < ApplicationRecord
+	PUBLIC_ATTRIBUTE_NAMES = column_names.freeze
 end

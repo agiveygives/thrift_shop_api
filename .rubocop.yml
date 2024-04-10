@@ -5,5 +5,26 @@ require:
 AllCops:
   NewCops: enable
 
+Metrics/AbcSize:
+  Enabled: false
+
+Rails/Delegate:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
+
+Lint/EmptyClass:
+  Enabled: false
+
+Layout/EndOfLine:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 20
+
+Layout/IndentationStyle:
+  EnforcedStyle: tabs
+
+Layout/IndentationWidth:
+  Width: 1
