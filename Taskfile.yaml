@@ -13,6 +13,7 @@ tasks:
             bundle exec rails db:create
           fi
       - docker compose exec api bundle exec rails db:migrate db:seed
+      - docker cp $(docker-compose ps -q api):rails/app ./
 
   down:
     cmds:
@@ -43,6 +44,12 @@ tasks:
           fi
       - docker compose exec api bundle exec rails db:create
       - docker compose exec api bundle exec rails db:migrate db:seed
+      - docker cp $(docker-compose ps -q api):rails/app ./
+
+  annotate:
+    cmds:
+      - docker compose exec api bundle exec annotate
+      - docker cp $(docker-compose ps -q api):rails/app ./
 
   format:
     cmds:

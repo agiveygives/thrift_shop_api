@@ -22,6 +22,7 @@ accounts = [
 ]
 
 accounts.each do |account|
-	model = Account.find_by(account)
+	model = Account.find_by(username: account[:username])
+	model ||= Account.find_by(email: account[:email])
 	Account.create!({ **account, password: 'password' }) unless model
 end

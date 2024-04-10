@@ -10,12 +10,12 @@ if Rails.env.development?
 		# You can override any of these by setting an environment variable of the
 		# same name.
 		Annotate.set_defaults(
-			'active_admin' => 'false', 'additional_file_patterns' => [
-																															File.join(Rails.application.root,
-																																									'app/factories/**/%MODEL_NAME%_factory.rb'),
-																															File.join(Rails.application.root,
-																																									'app/repositories/**/%MODEL_NAME%_repository.rb')
-																														],
+			'active_admin' => 'false',
+			'additional_file_patterns' => [
+				File.join(Rails.application.root, 'app/factories/**/%MODEL_NAME%_factory.rb'),
+				File.join(Rails.application.root, 'app/repositories/**/%MODEL_NAME%_repository.rb'),
+				File.join(Rails.application.root, 'app/model_apis/**/%MODEL_NAME%_api.rb'),
+			],
 			'routes' => 'false',
 			'models' => 'true',
 			'position_in_routes' => 'before',
