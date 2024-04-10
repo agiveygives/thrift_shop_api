@@ -29,15 +29,15 @@ class Account < ApplicationRecord
 	model_api AccountAPI
 
 	enum role: {
-		admin: "admin",
-		customer: "customer",
-		seller: "seller"
+		admin: 'admin',
+		customer: 'customer',
+		seller: 'seller'
 	}
 
-	attribute :phone_number, default: {}
-  serialize :phone_number, coder: JSONSerializer
+	attribute :phone_number, default: -> { {} }
+	serialize :phone_number, coder: JSONSerializer
 
-	attribute :role, default: "customer"
+	attribute :role, default: 'customer'
 
 	validates :email, presence: true, uniqueness: { case_sensitive: false }
 	validates :first_name, presence: true
@@ -54,10 +54,10 @@ class Account < ApplicationRecord
 		return if phone_number.blank?
 
 		account_with_phone_number = Account
-			.where("phone_number ->> 'value' = ?", phone_number["value"])
-			.and(Account.where("phone_number ->> 'country_code' = ?", phone_number["country_code"]))
-			.exists?
+																														.where("phone_number ->> 'value' = ?", phone_number['value'])
+																														.and(Account.where("phone_number ->> 'country_code' = ?", phone_number['country_code']))
+																														.exists?
 
-		errors.add(:phone_number, "has already been taken") if account_with_phone_number
+		errors.add(:phone_number, 'has already been taken') if account_with_phone_number
 	end
 end

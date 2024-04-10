@@ -14,7 +14,7 @@ if Rails.env.development?
 			'additional_file_patterns' => [
 				File.join(Rails.application.root, 'app/factories/**/%MODEL_NAME%_factory.rb'),
 				File.join(Rails.application.root, 'app/repositories/**/%MODEL_NAME%_repository.rb'),
-				File.join(Rails.application.root, 'app/model_apis/**/%MODEL_NAME%_api.rb'),
+				File.join(Rails.application.root, 'app/model_apis/**/%MODEL_NAME%_api.rb')
 			],
 			'routes' => 'false',
 			'models' => 'true',
